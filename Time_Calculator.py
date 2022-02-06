@@ -1,9 +1,16 @@
+import imp
+from sqlite3 import Time
 from tkinter import *
 from tkinter.ttk import *
 import datetime
 import platform
 import os
 import time
+import pandas as pd
+
+
+
+
 
 start = time.time()
 window = Tk()
@@ -51,6 +58,7 @@ def end():
     global start_time
     total_time = end_time - start_time
     time_form = form_time(total_time)
+    exel(time_form)
     text = "you studiet {}"
     aika = Label(window, text = text.format(time_form) )
     aika.pack()
@@ -63,6 +71,17 @@ start_tab = Button(command = start, text="start")
 end_tab = Button(command = end, text="end")
 start_tab.pack()
 end_tab.pack()
+
+#ecel 
+def exel(time_form):
+    df = pd.DataFrame({'Aika' : [time_form]})
+    writer = pd.ExcelWriter('Time.xlsx', 
+                   engine ='xlsxwriter')
+    df.to_excel(writer, sheet_name ='Sheet1')
+  
+    # Close the Pandas Excel writer
+    # object and output the Excel file.
+    writer.save()
 
 clock()
 window.mainloop()
